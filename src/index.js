@@ -92,9 +92,10 @@ import './index.css';
         } else {
           desc = 'Go to game start';
         }
+
         return (
           <li key={move}>
-            <button onClick={() => this.jumpTo(move)}>{desc}</button>
+            <button onClick={() => this.jumpTo(move)} style={{fontWeight: (move === this.state.stepNumber) ? "bold" : "normal"}}>{desc}</button>
           </li>
         );
       });
