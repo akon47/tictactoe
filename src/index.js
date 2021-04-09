@@ -85,9 +85,13 @@ import './index.css';
       const winner = calculateWinner(current.squares);
 
       const moves = history.map((step, move) => {
-        const desc = move ?
-          'Go to move #' + move :
-          'Go to game start';
+        let desc;
+        if(move) {
+          const diff = findDiff(history[move - 1].squares, history[move].squares);
+          desc = ('Go to move #' + move + ('(' + (diff % 3) + ', ' + parseInt(diff / 3) + ')'));
+        } else {
+          desc = 'Go to game start';
+        }
         return (
           <li key={move}>
             <button onClick={() => this.jumpTo(move)}>{desc}</button>
@@ -136,6 +140,15 @@ import './index.css';
       }
     }
     return null;
+  }
+
+  function findDiff(beforeSquares, afterSquares) {
+    for(let i = 0; i < beforeSquares.length; i++) {
+      if(beforeSquares[i] !== afterSquares[i]) {
+        return i;
+      }
+    }
+    return -1;
   }
   
   // ========================================
