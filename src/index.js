@@ -4,28 +4,32 @@ import './index.css';
 
 function Square(props) {
   return (
-    <button className="square" onClick={props.onClick}>
+    <button className="square" onClick={props.onClick} style={{ backgroundColor: props.isHighlighted ? "yellow" : "white" }}>
       {props.value}
     </button>
   );
 }
 
 class Board extends React.Component {
-  renderSquare(i) {
+  renderSquare(i, isHighlighted) {
     return (
       <Square
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
+        isHighlighted={isHighlighted}
       />
     );
   }
 
   render() {
+    const winnerHighlight = calculateWinnerHighlight(this.props.squares);
+
     let board = [];
     for (let row = 0; row < 3; row++) {
       let squares = [];
       for (let col = 0; col < 3; col++) {
-        squares.push(this.renderSquare(col + (row * 3)));
+        const idx = col + (row * 3);
+        squares.push(this.renderSquare(idx, idx === winnerHighlight[0] || idx === winnerHighlight[1] || idx === winnerHighlight[2]));
       }
       board.push(<div className="board-row">{squares}</div>);
     }
@@ -140,6 +144,26 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function calculateWinnerHighlight(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return lines[i];
+    }
+  }
+  return [-1, -1, -1];
 }
 
 function findDiff(beforeSquares, afterSquares) {
