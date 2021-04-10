@@ -1,1 +1,1 @@
-result: https://www.kimhwan.kr/tictactoe/build/index.html
+https://www.kimhwan.kr/tictactoe/build/index.html
